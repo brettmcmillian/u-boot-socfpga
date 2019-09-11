@@ -1,0 +1,6 @@
+CTLCC001_0_QSPI BOARD
+M:	Brett McMillian <brett.mcmillian@crossfieldtech.com>
+S:	Maintained
+F:	board/crossfield/ctlcc001_0_qspi/
+F:	include/configs/socfpga_ctlcc001_0_qspi.h
+F:	configs/ctlcc001_0_qspi_defconfig
