@@ -11,13 +11,11 @@
 	aliases {
 		ethernet0 = &gmac0;
 		serial0 = &uart0;
-		mmc0 = &mmc;
-		spi2 = &qspi;
 	};
 
 	chosen {
 		stdout-path = "serial0:115200n8";
-		u-boot,boot0 = <&qspi>;
+		u-boot,boot0 = <&flash0>;
 	};
 
 /*	leds {
@@ -79,7 +77,6 @@
 };
 
 &qspi {
-	status = "okay";
 	flash0: flash@0 {
 		#address-cells = <1>;
 		#size-cells = <1>;
@@ -125,3 +122,5 @@
 &i2c1 {
 	status = "okay";
 };
+
+#include "socfpga_stratix10_socdk-u-boot.dtsi"

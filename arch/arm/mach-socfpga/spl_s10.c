@@ -54,7 +54,7 @@ u32 spl_boot_device(void)
 
 	ret = device_get_global_by_ofnode(node, &dev);
 	if (ret) {
-		debug("%s: Boot device at not found, error: %d\n", __func__,
+		debug("%s: Boot device not found, error: %d\n", __func__,
 		      ret);
 		goto fallback;
 	}
