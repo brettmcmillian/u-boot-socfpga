@@ -101,21 +101,28 @@ unsigned int cm_get_qspi_controller_clk_hz(void);
  * CONFIG_BOOTARGS goes into the environment value "bootargs".
  * Do note the value will override also the chosen node in FDT blob.
  */
-#define CONFIG_BOOTARGS "earlycon panic=-1"
+#define CONFIG_BOOTARGS "earlycon panic=-1 console=ttyS0,115200"
 #define CONFIG_BOOTCOMMAND  "sf probe;run qspiload;run linux_qspi_enable;"\
                        "run qspiboot"
 
 #define CONFIG_EXTRA_ENV_SETTINGS \
 	"qspibootimageaddr=0x010B0000\0" \
 	"qspifdtaddr=0x01090000\0" \
+	"qspirootfsaddr=0x024B0000\0" \
+	"qspissbladdr=0x1000000\0" \
 	"bootimagesize=0x01400000\0" \
 	"fdtimagesize=0x00010000\0" \
+	"rootfssize=0x05B50000\0" \
+	"ssblsize=0x80000\0" \
 	"qspiload=sf read ${loadaddr} ${qspibootimageaddr} ${bootimagesize};sf read ${fdt_addr} ${qspifdtaddr} ${fdtimagesize}\0" \
-	"qspiboot=setenv bootargs earlycon root=/dev/mtdblock1 rw rootfstype=jffs2 rootwait;booti ${loadaddr} - ${fdt_addr}\0" \
+	"qspiboot=setenv bootargs earlycon root=/dev/mtdblock1 rw console=ttyS0,115200 rootfstype=jffs2 rootwait;booti ${loadaddr} - ${fdt_addr}\0" \
 	"loadaddr=" __stringify(CONFIG_SYS_LOAD_ADDR) "\0" \
 	"bootfile=Image\0" \
-	"fdt_addr=8000000\0" \
+	"ubootimage=u-boot.bin\0" \
+	"fdt_addr=0x8000000\0" \
 	"fdtimage=socfpga_stratix10_socdk.dtb\0" \
+	"rootfs_addr=0x9000000\0" \
+	"rootfs=core-image-minimal-stratix10.jffs2\0" \
 	"mmcroot=/dev/mmcblk0p2\0" \
 	"mmcboot=setenv bootargs " CONFIG_BOOTARGS \
 		" root=${mmcroot} rw rootwait;" \
@@ -123,24 +130,24 @@ unsigned int cm_get_qspi_controller_clk_hz(void);
 	"mmcload=mmc rescan;" \
 		"load mmc 0:1 ${loadaddr} ${bootfile};" \
 		"load mmc 0:1 ${fdt_addr} ${fdtimage}\0" \
-	"linux_qspi_enable=if sf probe; then " \
-		"echo Enabling QSPI at Linux DTB...;" \
-		"fdt addr ${fdt_addr}; fdt resize;" \
-		"fdt set /soc/spi@ff8d2000 status okay;" \
-		"if fdt set /soc/clocks/qspi-clk clock-frequency" \
-		" ${qspi_clock};" \
-		" else fdt set /soc/clkmgr/clocks/qspi_clk clock-frequency" \
-		" ${qspi_clock}; fi\0" \
+	"linux_qspi_enable=fdt addr ${fdt_addr}; fdt resize\0" \
 	"scriptaddr=0x02100000\0" \
 	"scriptfile=u-boot.scr\0" \
 	"fatscript=if fatload mmc 0:1 ${scriptaddr} ${scriptfile};" \
 		"then source ${scriptaddr}; fi\0" \
 	"socfpga_legacy_reset_compat=1\0" \
-	"ethaddr=ba:a7:05:ef:cd:b7\0" \
 	"ipaddr=192.168.0.37\0" \
 	"netmask=255.255.255.0\0" \
 	"gatewayip=192.168.0.1\0" \
-	"serverip=192.168.0.16\0"
+	"serverip=192.168.0.16\0" \
+	"netboot=setenv bootargs earlycon root=/dev/mtdblock1 rw rootfstype=jffs2 console=ttyS0,115200 rootwait;" \
+		"tftp ${rootfs_addr} ${rootfs};sf probe;sf erase ${qspirootfsaddr} +${rootfssize};" \
+		"sf write ${rootfs_addr} ${qspirootfsaddr} ${filesize};" \
+		"tftp ${loadaddr} ${bootfile};tftp ${fdt_addr} ${fdtimage};" \
+		"booti ${loadaddr} - ${fdt_addr}\0" \
+	"flash_uboot=tftp ${loadaddr} ${ubootimage};" \
+		"sf probe;sf erase ${qspissbladdr} ${ssblsize};sf write ${loadaddr} ${qspissbladdr} ${filesize};" \
+		"reset\0"
 
 /*
  * Generic Interrupt Controller Definitions

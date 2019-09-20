@@ -60,18 +60,38 @@
 		#address-cells = <1>;
 		#size-cells = <0>;
 		compatible = "snps,dwmac-mdio";
-		phy0: ethernet-phy@1 {
-			reg = <4>;
+		phy0: ethernet-phy@0 {
+			compatible = "marvell,88E1518";
+			reg = <0>;
 		};
 	};
 };
+
+&gmac1 {
+	status = "okay";
+	phy-mode = "rgmii";
+	phy-handle = <&phy1>;
+
+	max-frame-size = <3800>;
+
+	mdio1 {
+		#address-cells = <1>;
+		#size-cells = <0>;
+		compatible = "snps,dwmac-mdio";
+		phy1: ethernet-phy@0 {
+			compatible = "marvell,88E1518";
+			reg = <0>;
+		};
+	 };
+};
+
 
 &mmc {
 	status = "okay";
 	cap-sd-highspeed;
 	cap-mmc-highspeed;
 	broken-cd;
-	bus-width = <4>;
+	bus-width = <8>;
 	drvsel = <3>;
 	smplsel = <0>;
 };
@@ -103,7 +123,7 @@
 				reg = <0x0 0x024B0000>;
 			};
 
-			qspi_rootfs: partition@4000000 {
+			qspi_rootfs: partition@024B0000 {
 				label = "Root Filesystem - JFFS2";
 				reg = <0x024B0000 0x05B50000>;
 			};
@@ -115,11 +135,7 @@
 	status = "okay";
 };
 
-&usb0 {
-	status = "okay";
-};
-
-&i2c1 {
+&uart1 {
 	status = "okay";
 };
 
