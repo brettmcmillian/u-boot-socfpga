@@ -120,9 +120,9 @@ unsigned int cm_get_qspi_controller_clk_hz(void);
 	"bootfile=Image\0" \
 	"ubootimage=u-boot.bin\0" \
 	"fdt_addr=0x8000000\0" \
-	"fdtimage=socfpga_stratix10_socdk.dtb\0" \
+	"fdtimage=ctlcc001_0_qspi.dtb\0" \
 	"rootfs_addr=0x9000000\0" \
-	"rootfs=core-image-minimal-stratix10.jffs2\0" \
+	"rootfs=core-image-minimal-cc001-0.jffs2\0" \
 	"mmcroot=/dev/mmcblk0p2\0" \
 	"mmcboot=setenv bootargs " CONFIG_BOOTARGS \
 		" root=${mmcroot} rw rootwait;" \
