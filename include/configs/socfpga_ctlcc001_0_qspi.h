@@ -117,12 +117,12 @@ unsigned int cm_get_qspi_controller_clk_hz(void);
 	"qspiload=sf read ${loadaddr} ${qspibootimageaddr} ${bootimagesize};sf read ${fdt_addr} ${qspifdtaddr} ${fdtimagesize}\0" \
 	"qspiboot=setenv bootargs earlycon root=/dev/mtdblock1 rw console=ttyS0,115200 rootfstype=jffs2 rootwait;booti ${loadaddr} - ${fdt_addr}\0" \
 	"loadaddr=" __stringify(CONFIG_SYS_LOAD_ADDR) "\0" \
-	"bootfile=Image\0" \
+	"bootfile=kernel.bin\0" \
 	"ubootimage=u-boot.bin\0" \
 	"fdt_addr=0x8000000\0" \
-	"fdtimage=ctlcc001_0_qspi.dtb\0" \
+	"fdtimage=devicetree.bin\0" \
 	"rootfs_addr=0x9000000\0" \
-	"rootfs=core-image-minimal-cc001-0.jffs2\0" \
+	"rootfs=rootfs.bin\0" \
 	"mmcroot=/dev/mmcblk0p2\0" \
 	"mmcboot=setenv bootargs " CONFIG_BOOTARGS \
 		" root=${mmcroot} rw rootwait;" \
