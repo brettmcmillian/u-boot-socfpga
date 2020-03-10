@@ -102,7 +102,7 @@ unsigned int cm_get_qspi_controller_clk_hz(void);
  * Do note the value will override also the chosen node in FDT blob.
  */
 #define CONFIG_BOOTARGS "earlycon panic=-1 console=ttyS0,115200"
-#define CONFIG_BOOTCOMMAND  "sf probe;run qspiload;run linux_qspi_enable;"\
+#define CONFIG_BOOTCOMMAND  "run bridge_enable;sf probe;run qspiload;run linux_qspi_enable;"\
                        "run qspiboot"
 
 #define CONFIG_EXTRA_ENV_SETTINGS \
@@ -131,6 +131,7 @@ unsigned int cm_get_qspi_controller_clk_hz(void);
 		"load mmc 0:1 ${loadaddr} ${bootfile};" \
 		"load mmc 0:1 ${fdt_addr} ${fdtimage}\0" \
 	"linux_qspi_enable=fdt addr ${fdt_addr}; fdt resize\0" \
+	"bridge_enable=bridge enable\0" \
 	"scriptaddr=0x02100000\0" \
 	"scriptfile=u-boot.scr\0" \
 	"fatscript=if fatload mmc 0:1 ${scriptaddr} ${scriptfile};" \
