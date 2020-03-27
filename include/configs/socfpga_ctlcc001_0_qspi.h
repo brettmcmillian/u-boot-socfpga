@@ -102,7 +102,7 @@ unsigned int cm_get_qspi_controller_clk_hz(void);
  * Do note the value will override also the chosen node in FDT blob.
  */
 #define CONFIG_BOOTARGS "earlycon panic=-1 console=ttyS0,115200"
-#define CONFIG_BOOTCOMMAND  "run bridge_enable;sf probe;run qspiload;run linux_qspi_enable;"\
+#define CONFIG_BOOTCOMMAND  "run f2sdram_enable;run bridge_enable;sf probe;run qspiload;run linux_qspi_enable;"\
                        "run qspiboot"
 
 #define CONFIG_EXTRA_ENV_SETTINGS \
@@ -132,6 +132,11 @@ unsigned int cm_get_qspi_controller_clk_hz(void);
 		"load mmc 0:1 ${fdt_addr} ${fdtimage}\0" \
 	"linux_qspi_enable=fdt addr ${fdt_addr}; fdt resize\0" \
 	"bridge_enable=bridge enable\0" \
+	"f2sdram_enable=mw.l 0xFFD24800 0xFFFFFFFF;mw.q 0xF70105A0 0x0000000000000000;mw.q 0xF7010668 0x000000fffffc0000;" \
+			"mw.l 0xF8020210 0x00000000;mw.l 0xF8020214 0x00000000;mw.l 0xF8020218 0x3FFFFFFF;" \
+			"mw.l 0xF802021C 0x00000000;mw.l 0xF8020204 0x00000001;mw.l 0xF8020310 0x00000000;" \
+			"mw.l 0xF8020314 0x00000000;mw.l 0xF8020318 0x3FFFFFFF;mw.l 0xF802031C 0x00000000;" \
+			"mw.l 0xF8020304 0x00000001;mw.l 0xF8024050 0x00000092;mw.l 0xFFD1102C 0x00000000\0" \
 	"scriptaddr=0x02100000\0" \
 	"scriptfile=u-boot.scr\0" \
 	"fatscript=if fatload mmc 0:1 ${scriptaddr} ${scriptfile};" \
