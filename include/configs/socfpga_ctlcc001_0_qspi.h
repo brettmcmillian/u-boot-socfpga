@@ -102,7 +102,7 @@ unsigned int cm_get_qspi_controller_clk_hz(void);
  * Do note the value will override also the chosen node in FDT blob.
  */
 #define CONFIG_BOOTARGS "earlycon panic=-1 console=ttyS0,115200"
-#define CONFIG_BOOTCOMMAND  "run f2sdram_enable;run bridge_enable;sf probe;run qspiload;run linux_qspi_enable;"\
+#define CONFIG_BOOTCOMMAND  "run bridge_enable;run f2sdram_enable;sf probe;run qspiload;run linux_qspi_enable;"\
                        "run qspiboot"
 
 #define CONFIG_EXTRA_ENV_SETTINGS \
